@@ -9,3 +9,34 @@
     scrollbar-width: none;
   }
 }
+
+@layer components {
+  .animate-map-ping {
+    animation: map-ping 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+  .animate-map-pulse {
+    animation: map-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+@keyframes map-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+@keyframes map-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.5;
+  }
+}

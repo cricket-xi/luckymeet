@@ -47,11 +47,11 @@ export default function Home({ onNavigate }: { onNavigate: (page: string, data?:
   };
 
   const pins = [
-    { id: 1, anchor: [39.925, 116.465] as [number, number], avatar: 'https://picsum.photos/seed/user1/100/100', title: '发现一家超棒的独立书店，氛围感拉满！📚', user: '@匿名探索者', likes: 128, distance: '1.2km' },
-    { id: 2, anchor: [39.915, 116.455] as [number, number], avatar: 'https://picsum.photos/seed/user2/100/100', title: '周末骑行打卡，风景太美了🚴‍♂️', user: '@风之子', likes: 45, distance: '3.5km' },
-    { id: 3, anchor: [39.930, 116.460] as [number, number], avatar: 'https://picsum.photos/seed/user3/100/100', title: '深夜食堂，这家拉面绝了🍜', user: '@夜猫子', likes: 89, distance: '800m' },
-    { id: 4, anchor: [39.910, 116.470] as [number, number], avatar: 'https://picsum.photos/seed/user4/100/100', title: '有没有一起去看画展的？🎨', user: '@艺术细菌', likes: 234, distance: '5.0km' },
-    { id: 5, anchor: [39.922, 116.450] as [number, number], avatar: 'https://picsum.photos/seed/user5/100/100', title: '今天的天空是粉色的！☁️', user: '@云朵收集者', likes: 567, distance: '2.1km' },
+    { id: 1, anchor: [userLocation[0] + 0.005, userLocation[1] + 0.005] as [number, number], avatar: 'https://picsum.photos/seed/user1/100/100', title: '发现一家超棒的独立书店，氛围感拉满！📚', user: '@匿名探索者', likes: 128, distance: '1.2km' },
+    { id: 2, anchor: [userLocation[0] - 0.005, userLocation[1] - 0.005] as [number, number], avatar: 'https://picsum.photos/seed/user2/100/100', title: '周末骑行打卡，风景太美了🚴‍♂️', user: '@风之子', likes: 45, distance: '3.5km' },
+    { id: 3, anchor: [userLocation[0] + 0.010, userLocation[1] - 0.000] as [number, number], avatar: 'https://picsum.photos/seed/user3/100/100', title: '深夜食堂，这家拉面绝了🍜', user: '@夜猫子', likes: 89, distance: '800m' },
+    { id: 4, anchor: [userLocation[0] - 0.010, userLocation[1] + 0.010] as [number, number], avatar: 'https://picsum.photos/seed/user4/100/100', title: '有没有一起去看画展的？🎨', user: '@艺术细菌', likes: 234, distance: '5.0km' },
+    { id: 5, anchor: [userLocation[0] + 0.002, userLocation[1] - 0.010] as [number, number], avatar: 'https://picsum.photos/seed/user5/100/100', title: '今天的天空是粉色的！☁️', user: '@云朵收集者', likes: 567, distance: '2.1km' },
   ];
 
   return (
@@ -86,38 +86,42 @@ export default function Home({ onNavigate }: { onNavigate: (page: string, data?:
           {pins.map(pin => (
             // @ts-ignore
             <Overlay key={pin.id} anchor={pin.anchor} offset={[24, 48]}>
-              <motion.div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedPin(pin);
-                }}
-                whileHover={{ scale: 1.1, zIndex: 20 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative group cursor-pointer flex flex-col items-center"
-              >
-                <div className="w-12 h-12 rounded-full border-2 border-pink-500 overflow-hidden shadow-[0_0_15px_rgba(236,72,153,0.3)] bg-white">
-                  <img src={pin.avatar} className="w-full h-full object-cover" alt="avatar" />
-                </div>
-                <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px] border-t-pink-500 -mt-[1px]" />
-                
-                <div className="absolute top-0 left-0 w-12 h-12 rounded-full border-2 border-pink-500 animate-ping opacity-40 pointer-events-none" />
-                
-                <div className="absolute -bottom-6 bg-white/90 backdrop-blur-md px-2 py-0.5 rounded-full text-[10px] text-gray-700 border border-black/5 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
-                  {pin.distance}
-                </div>
-              </motion.div>
+              <div>
+                <motion.div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedPin(pin);
+                  }}
+                  whileHover={{ scale: 1.1, zIndex: 20 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="relative group cursor-pointer flex flex-col items-center"
+                >
+                  <div className="w-12 h-12 rounded-full border-2 border-pink-500 overflow-hidden shadow-[0_0_15px_rgba(236,72,153,0.3)] bg-white">
+                    <img src={pin.avatar} className="w-full h-full object-cover" alt="avatar" />
+                  </div>
+                  <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px] border-t-pink-500 -mt-[1px]" />
+                  
+                  <div className="absolute top-0 left-0 w-12 h-12 rounded-full border-2 border-pink-500 pointer-events-none animate-map-ping" />
+                  
+                  <div className="absolute -bottom-6 bg-white/90 backdrop-blur-md px-2 py-0.5 rounded-full text-[10px] text-gray-700 border border-black/5 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
+                    {pin.distance}
+                  </div>
+                </motion.div>
+              </div>
             </Overlay>
           ))}
           
           {/* Current User Pin */}
           <Overlay anchor={userLocation} offset={[28, 56]}>
-            <div className="relative flex flex-col items-center pointer-events-none">
-              <div className="w-14 h-14 rounded-full border-2 border-blue-500 overflow-hidden shadow-[0_0_20px_rgba(59,130,246,0.4)] bg-white">
-                <img src="https://picsum.photos/seed/user/200/200" className="w-full h-full object-cover" alt="my avatar" />
+            <div>
+              <div className="relative flex flex-col items-center pointer-events-none">
+                <div className="w-14 h-14 rounded-full border-2 border-blue-500 overflow-hidden shadow-[0_0_20px_rgba(59,130,246,0.4)] bg-white">
+                  <img src="https://picsum.photos/seed/user/200/200" className="w-full h-full object-cover" alt="my avatar" />
+                </div>
+                <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[10px] border-t-blue-500 -mt-[1px]" />
+                <div className="absolute top-0 left-0 w-14 h-14 rounded-full bg-blue-500/20 pointer-events-none animate-map-pulse" />
+                <div className="absolute top-0 left-0 w-14 h-14 rounded-full border border-blue-500/30 pointer-events-none animate-map-ping" />
               </div>
-              <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[10px] border-t-blue-500 -mt-[1px]" />
-              <div className="absolute top-0 left-0 w-14 h-14 rounded-full bg-blue-500/20 animate-pulse pointer-events-none" />
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full border border-blue-500/30 animate-ping opacity-20 pointer-events-none" />
             </div>
           </Overlay>
         </Map>

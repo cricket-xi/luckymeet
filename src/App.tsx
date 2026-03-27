@@ -10,9 +10,11 @@ import PostDetail from './components/PostDetail';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
+  const [previousPage, setPreviousPage] = useState('home');
   const [pageData, setPageData] = useState<any>(null);
 
   const handleNavigate = (page: string, data?: any) => {
+    setPreviousPage(currentPage);
     setCurrentPage(page);
     if (data !== undefined) {
       setPageData(data);
@@ -38,8 +40,8 @@ export default function App() {
             {currentPage === 'stream' && <Stream onNavigate={handleNavigate} />}
             {currentPage === 'match' && <Match />}
             {currentPage === 'treehole' && <TreeHole />}
-            {currentPage === 'profile' && <Profile />}
-            {currentPage === 'post-detail' && <PostDetail post={pageData} onBack={() => handleNavigate('home')} />}
+            {currentPage === 'profile' && <Profile onNavigate={handleNavigate} />}
+            {currentPage === 'post-detail' && <PostDetail post={pageData} onBack={() => handleNavigate(previousPage)} />}
           </motion.div>
         </AnimatePresence>
         {showBottomNav && <BottomNav currentPage={currentPage} onNavigate={handleNavigate} />}

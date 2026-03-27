@@ -1,9 +1,28 @@
 import { useState } from 'react';
-import { History, Sparkles, X, MessageCircle } from 'lucide-react';
+import { History, Sparkles, X, MessageCircle, Search, MoreHorizontal, ChevronLeft, Send, Phone, Video, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
+// Mock Data
+const MOCK_CHATS = [
+  { id: 1, name: '星空漫游者', avatar: 'https://picsum.photos/seed/user1/100/100', lastMessage: '那本书的结局真的很出人意料...', time: '10:42', unread: 2 },
+  { id: 2, name: '深海潜水员', avatar: 'https://picsum.photos/seed/user2/100/100', lastMessage: '周末去听现场吗？', time: '昨天', unread: 0 },
+  { id: 3, name: '城市边缘', avatar: 'https://picsum.photos/seed/user3/100/100', lastMessage: '哈哈哈哈确实是这样', time: '星期二', unread: 0 },
+  { id: 4, name: '光影捕手', avatar: 'https://picsum.photos/seed/user4/100/100', lastMessage: '[图片]', time: '星期一', unread: 1 },
+];
+
+const MOCK_FRIENDS = [
+  { id: 1, name: '星空漫游者', avatar: 'https://picsum.photos/seed/user1/100/100', status: 'online', tags: ['后摇', '科幻'] },
+  { id: 2, name: '深海潜水员', avatar: 'https://picsum.photos/seed/user2/100/100', status: 'offline', tags: ['潜水', '摄影'] },
+  { id: 3, name: '城市边缘', avatar: 'https://picsum.photos/seed/user3/100/100', status: 'online', tags: ['街拍', '咖啡'] },
+  { id: 4, name: '光影捕手', avatar: 'https://picsum.photos/seed/user4/100/100', status: 'offline', tags: ['电影', '展览'] },
+  { id: 5, name: '风的颜色', avatar: 'https://picsum.photos/seed/user5/100/100', status: 'online', tags: ['旅行', '手账'] },
+];
+
 export default function Match() {
+  const [activeTab, setActiveTab] = useState<'match' | 'chat' | 'friends'>('match');
   const [matchState, setMatchState] = useState<'idle' | 'matching' | 'matched'>('idle');
+  const [selectedChat, setSelectedChat] = useState<any>(null);
+  const [messageInput, setMessageInput] = useState('');
 
   const startMatch = () => {
     setMatchState('matching');
@@ -11,6 +30,81 @@ export default function Match() {
       setMatchState('matched');
     }, 2500);
   };
+
+  if (selectedChat) {
+    return (
+      <div className="h-full w-full bg-gray-50 flex flex-col relative z-50">
+        {/* Chat Header */}
+        <div className="pt-12 pb-4 px-4 bg-white/90 backdrop-blur-md border-b border-black/5 flex items-center justify-between sticky top-0 z-20">
+          <button 
+            onClick={() => setSelectedChat(null)}
+            className="p-2 -ml-2 text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          <div className="flex flex-col items-center">
+            <span className="font-bold text-gray-900">{selectedChat.name}</span>
+            <span className="text-xs text-green-500 font-medium">在线</span>
+          </div>
+          <div className="flex gap-2">
+            <button className="p-2 text-gray-600 hover:text-gray-900 transition-colors">
+              <Phone className="w-5 h-5" />
+            </button>
+            <button className="p-2 text-gray-600 hover:text-gray-900 transition-colors">
+              <Video className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Chat Messages */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-6">
+          <div className="text-center text-xs text-gray-400 my-4">昨天 10:42</div>
+          
+          <div className="flex gap-3 max-w-[85%]">
+            <img src={selectedChat.avatar} className="w-10 h-10 rounded-full object-cover flex-shrink-0" alt="avatar" />
+            <div className="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-black/5 text-gray-800 text-[15px] leading-relaxed">
+              你好！很高兴认识你，我看你也喜欢后摇？
+            </div>
+          </div>
+          
+          <div className="flex gap-3 max-w-[85%] self-end ml-auto flex-row-reverse">
+            <img src="https://picsum.photos/seed/myavatar/100/100" className="w-10 h-10 rounded-full object-cover flex-shrink-0" alt="my avatar" />
+            <div className="bg-gray-900 text-white p-3 rounded-2xl rounded-tr-none shadow-sm text-[15px] leading-relaxed">
+              是啊！最近一直在听惘闻的新专辑。
+            </div>
+          </div>
+
+          <div className="flex gap-3 max-w-[85%]">
+            <img src={selectedChat.avatar} className="w-10 h-10 rounded-full object-cover flex-shrink-0" alt="avatar" />
+            <div className="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-black/5 text-gray-800 text-[15px] leading-relaxed">
+              {selectedChat.lastMessage}
+            </div>
+          </div>
+        </div>
+
+        {/* Chat Input */}
+        <div className="p-4 bg-white border-t border-black/5 pb-8">
+          <div className="flex items-center gap-3 bg-gray-100 rounded-full p-1.5 pr-2">
+            <button className="p-2 text-gray-500 hover:text-gray-700 transition-colors">
+              <Plus className="w-5 h-5" />
+            </button>
+            <input 
+              type="text" 
+              value={messageInput}
+              onChange={(e) => setMessageInput(e.target.value)}
+              placeholder="发送消息..." 
+              className="flex-1 bg-transparent outline-none text-[15px] text-gray-900 placeholder:text-gray-400"
+            />
+            <button 
+              className={`p-2.5 rounded-full transition-all ${messageInput.trim() ? 'bg-gray-900 text-white shadow-md' : 'bg-gray-200 text-gray-400'}`}
+            >
+              <Send className="w-4 h-4 ml-0.5" />
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full w-full bg-gray-50 flex flex-col pb-16 relative overflow-hidden">
@@ -21,16 +115,32 @@ export default function Match() {
 
       {/* Top Nav */}
       <div className="p-4 pt-12 flex justify-between items-center relative z-20">
-        <h1 className="text-2xl font-bold text-gray-900 tracking-wide">今日奇遇</h1>
-        <button className="p-2.5 rounded-full bg-white hover:bg-gray-100 transition-colors border border-black/5 shadow-sm">
-          <History className="w-5 h-5 text-gray-700" />
-        </button>
+        <h1 className="text-2xl font-bold text-gray-900 tracking-wide">
+          {activeTab === 'match' ? '今日奇遇' : activeTab === 'chat' ? '消息' : '好友'}
+        </h1>
+        {activeTab === 'match' ? (
+          <button className="p-2.5 rounded-full bg-white hover:bg-gray-100 transition-colors border border-black/5 shadow-sm">
+            <History className="w-5 h-5 text-gray-700" />
+          </button>
+        ) : (
+          <button className="p-2.5 rounded-full bg-white hover:bg-gray-100 transition-colors border border-black/5 shadow-sm">
+            <Search className="w-5 h-5 text-gray-700" />
+          </button>
+        )}
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col items-center justify-center p-6 relative z-10">
+      <div className="flex-1 overflow-y-auto relative z-10">
         <AnimatePresence mode="wait">
-          {matchState === 'idle' && (
+          {activeTab === 'match' && (
+            <motion.div
+              key="match-tab"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              className="h-full flex flex-col items-center justify-center p-6"
+            >
+              {matchState === 'idle' && (
             <motion.div
               key="idle"
               initial={{ opacity: 0, scale: 0.95 }}
@@ -126,32 +236,124 @@ export default function Match() {
                 </div>
               </div>
               
-              <div className="flex gap-4 w-full">
-                <button
-                  onClick={() => setMatchState('idle')}
-                  className="flex-1 py-4 rounded-2xl bg-gray-100 text-gray-600 font-bold hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 border border-black/5"
-                >
-                  <X className="w-5 h-5" />
-                  放弃
-                </button>
-                <button
-                  className="flex-[2] py-4 rounded-2xl bg-gray-900 text-white font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 active:scale-95"
-                >
-                  <MessageCircle className="w-5 h-5" />
-                  开启聊天
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+                <div className="flex gap-4 w-full">
+                  <button
+                    onClick={() => setMatchState('idle')}
+                    className="flex-1 py-4 rounded-2xl bg-gray-100 text-gray-600 font-bold hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 border border-black/5"
+                  >
+                    <X className="w-5 h-5" />
+                    放弃
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('chat')}
+                    className="flex-[2] py-4 rounded-2xl bg-gray-900 text-white font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 active:scale-95"
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    开启聊天
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </motion.div>
+        )}
 
-      {/* Sub Tabs */}
-      <div className="px-6 pb-6 pt-2 flex justify-center gap-10 text-base font-medium relative z-20">
-        <span className="text-gray-900 border-b-2 border-gray-900 pb-1.5 px-2 cursor-pointer">匹配</span>
-        <span className="text-gray-400 hover:text-gray-600 transition-colors pb-1.5 px-2 cursor-pointer">聊天</span>
-        <span className="text-gray-400 hover:text-gray-600 transition-colors pb-1.5 px-2 cursor-pointer">好友</span>
-      </div>
+        {activeTab === 'chat' && (
+          <motion.div
+            key="chat-tab"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="px-4 pb-20"
+          >
+            <div className="space-y-3">
+              {MOCK_CHATS.map((chat) => (
+                <div 
+                  key={chat.id} 
+                  onClick={() => setSelectedChat(chat)}
+                  className="flex items-center gap-4 p-4 bg-white rounded-2xl shadow-sm border border-black/5 hover:shadow-md transition-shadow active:scale-[0.98] cursor-pointer"
+                >
+                  <div className="relative">
+                    <img src={chat.avatar} alt={chat.name} className="w-14 h-14 rounded-full object-cover" />
+                    {chat.unread > 0 && (
+                      <div className="absolute -top-1 -right-1 w-5 h-5 bg-pink-500 rounded-full border-2 border-white flex items-center justify-center text-[10px] text-white font-bold">
+                        {chat.unread}
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex justify-between items-baseline mb-1">
+                      <h3 className="text-base font-bold text-gray-900 truncate">{chat.name}</h3>
+                      <span className="text-xs text-gray-400 flex-shrink-0 ml-2">{chat.time}</span>
+                    </div>
+                    <p className="text-sm text-gray-500 truncate">{chat.lastMessage}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {activeTab === 'friends' && (
+          <motion.div
+            key="friends-tab"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="px-4 pb-20"
+          >
+            <div className="space-y-3">
+              {MOCK_FRIENDS.map((friend) => (
+                <div 
+                  key={friend.id} 
+                  onClick={() => setSelectedChat({ ...friend, lastMessage: '打个招呼吧！', time: '刚刚', unread: 0 })}
+                  className="flex items-center gap-4 p-4 bg-white rounded-2xl shadow-sm border border-black/5 hover:shadow-md transition-shadow active:scale-[0.98] cursor-pointer"
+                >
+                  <div className="relative">
+                    <img src={friend.avatar} alt={friend.name} className="w-12 h-12 rounded-full object-cover" />
+                    <div className={`absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-white ${friend.status === 'online' ? 'bg-green-500' : 'bg-gray-300'}`} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-base font-bold text-gray-900 truncate mb-1">{friend.name}</h3>
+                    <div className="flex gap-2">
+                      {friend.tags.map(tag => (
+                        <span key={tag} className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded-md text-xs">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <button className="p-2 text-gray-400 hover:text-gray-600">
+                    <MoreHorizontal className="w-5 h-5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+
+    {/* Sub Tabs */}
+    <div className="px-6 pb-6 pt-2 flex justify-center gap-10 text-base font-medium relative z-20 bg-gradient-to-t from-gray-50 via-gray-50 to-transparent">
+      <span 
+        onClick={() => setActiveTab('match')}
+        className={`pb-1.5 px-2 cursor-pointer transition-colors ${activeTab === 'match' ? 'text-gray-900 border-b-2 border-gray-900' : 'text-gray-400 hover:text-gray-600'}`}
+      >
+        匹配
+      </span>
+      <span 
+        onClick={() => setActiveTab('chat')}
+        className={`pb-1.5 px-2 cursor-pointer transition-colors ${activeTab === 'chat' ? 'text-gray-900 border-b-2 border-gray-900' : 'text-gray-400 hover:text-gray-600'}`}
+      >
+        聊天
+      </span>
+      <span 
+        onClick={() => setActiveTab('friends')}
+        className={`pb-1.5 px-2 cursor-pointer transition-colors ${activeTab === 'friends' ? 'text-gray-900 border-b-2 border-gray-900' : 'text-gray-400 hover:text-gray-600'}`}
+      >
+        好友
+      </span>
+    </div>
     </div>
   );
 }

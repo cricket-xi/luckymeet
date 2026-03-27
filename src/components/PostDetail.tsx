@@ -15,17 +15,17 @@ export default function PostDetail({ post, onBack }: { post?: any, onBack: () =>
   };
 
   return (
-    <div className="h-full w-full bg-[#0a0a0a] flex flex-col overflow-y-auto no-scrollbar pb-16">
+    <div className="h-full w-full bg-white flex flex-col overflow-y-auto no-scrollbar pb-16">
       {/* Header */}
-      <div className="p-4 pt-12 flex items-center justify-between sticky top-0 bg-[#0a0a0a]/90 backdrop-blur-xl z-20 border-b border-white/10">
-        <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-white/10 text-white transition-colors">
+      <div className="p-4 pt-12 flex items-center justify-between sticky top-0 bg-white/90 backdrop-blur-xl z-20 border-b border-black/5">
+        <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-gray-100 text-gray-700 transition-colors">
           <ChevronLeft className="w-6 h-6" />
         </button>
         <div className="flex items-center gap-3">
-          <img src={displayPost.avatar} className="w-8 h-8 rounded-full object-cover" alt="avatar" />
-          <span className="text-white font-medium text-sm">{displayPost.user}</span>
+          <img src={displayPost.avatar} className="w-8 h-8 rounded-full object-cover border border-black/5" alt="avatar" />
+          <span className="text-gray-900 font-bold text-sm">{displayPost.user}</span>
         </div>
-        <button className="p-2 -mr-2 rounded-full hover:bg-white/10 text-white transition-colors">
+        <button className="p-2 -mr-2 rounded-full hover:bg-gray-100 text-gray-700 transition-colors">
           <MoreHorizontal className="w-6 h-6" />
         </button>
       </div>
@@ -33,13 +33,13 @@ export default function PostDetail({ post, onBack }: { post?: any, onBack: () =>
       {/* Content */}
       <div className="flex-1">
         {/* Media (Image/Video) */}
-        <div className="w-full aspect-square bg-zinc-900 relative">
-          <img src={displayPost.media || `https://picsum.photos/seed/${displayPost.id || 'default'}/800/800`} className="w-full h-full object-cover" alt="post media" />
+        <div className="w-full aspect-square bg-gray-100 relative">
+          <img src={displayPost.media || displayPost.image || `https://picsum.photos/seed/${displayPost.id || 'default'}/800/800`} className="w-full h-full object-cover" alt="post media" />
           {/* Pagination dots indicator placeholder */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
-            <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
-            <div className="w-1.5 h-1.5 rounded-full bg-white/50"></div>
-            <div className="w-1.5 h-1.5 rounded-full bg-white/50"></div>
+            <div className="w-1.5 h-1.5 rounded-full bg-white shadow-sm"></div>
+            <div className="w-1.5 h-1.5 rounded-full bg-white/50 shadow-sm"></div>
+            <div className="w-1.5 h-1.5 rounded-full bg-white/50 shadow-sm"></div>
           </div>
         </div>
 
@@ -49,29 +49,29 @@ export default function PostDetail({ post, onBack }: { post?: any, onBack: () =>
             <div className="flex gap-5">
               <button className="flex items-center gap-1.5 text-pink-500">
                 <Heart className="w-6 h-6 fill-current" />
-                <span className="font-medium">{displayPost.likes}</span>
+                <span className="font-bold">{displayPost.likes}</span>
               </button>
-              <button className="flex items-center gap-1.5 text-white">
+              <button className="flex items-center gap-1.5 text-gray-700 hover:text-blue-500 transition-colors">
                 <MessageCircle className="w-6 h-6" />
-                <span className="font-medium">32</span>
+                <span className="font-bold">32</span>
               </button>
             </div>
-            <button className="text-white">
+            <button className="text-gray-700 hover:text-gray-900 transition-colors">
               <Share2 className="w-6 h-6" />
             </button>
           </div>
 
-          <h1 className="text-lg font-bold text-white mb-2">{displayPost.title}</h1>
-          <p className="text-gray-300 text-[15px] leading-relaxed mb-4 whitespace-pre-wrap">
+          <h1 className="text-lg font-bold text-gray-900 mb-2 leading-snug">{displayPost.title}</h1>
+          <p className="text-gray-700 text-[15px] leading-relaxed mb-4 whitespace-pre-wrap">
             {displayPost.content || displayPost.title}
           </p>
           <div className="flex flex-wrap gap-2 mb-6">
             {(displayPost.tags || ["#城市探索", "#奇遇"]).map((tag: string, index: number) => (
-              <span key={index} className="text-pink-400 text-sm font-medium">{tag}</span>
+              <span key={index} className="text-pink-500 text-sm font-bold bg-pink-50 px-2 py-0.5 rounded-md">{tag}</span>
             ))}
           </div>
 
-          <span className="text-xs text-gray-500">发布于 {displayPost.time || '刚刚'} · 距离 {displayPost.distance}</span>
+          <span className="text-xs text-gray-400 font-medium">发布于 {displayPost.time || '刚刚'} {displayPost.distance ? `· 距离 ${displayPost.distance}` : ''}</span>
         </div>
       </div>
     </div>
