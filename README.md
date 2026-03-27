@@ -2,7 +2,6 @@
 一、文档概述
 1.1 文档基础信息
 产品名称：奇遇 (Miracle Encounter)
-View your app in AI Studio: https://ai.studio/apps/6d289b81-fbdb-44ca-b1c3-678b73a58dac
 原型（https://ai.studio/apps/6d289b81-fbdb-44ca-b1c3-678b73a58dac）
 产品版本：V2.0 核心重构版（含四大颠覆级AI创新与商业闭环）
 核心定位：国内首个以「全场景AI深度人格与情绪理解」为核心，主打跨时空共振、无压力场景相遇、反向灵魂社交的新生代元宇宙级社交内容平台。
