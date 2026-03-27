@@ -1,0 +1,5 @@
+{
+  "name": "奇遇 (Qiyu)",
+  "description": "A serendipitous social matching and tree hole companion app prototype.",
+  "requestFramePermissions": ["geolocation"]
+}
